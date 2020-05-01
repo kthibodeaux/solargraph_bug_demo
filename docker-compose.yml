@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432"
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  web:
+    tty: true
+    stdin_open: true
+    build:
+      context: ./
+    command: /app/entrypoint.sh
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - 'BUNDLE_PATH=/app/bundle'
+      - 'GEM_HOME=/app/bundle'
